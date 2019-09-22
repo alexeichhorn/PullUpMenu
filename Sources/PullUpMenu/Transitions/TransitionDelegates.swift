@@ -11,7 +11,7 @@ import UIKit
 extension PullUpMenuController: UIViewControllerTransitioningDelegate {
     
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return PullUpMenuTransition(isPresenting: true, interactionController: (presenting as? InteractiveTransitionParent)?.interactiveController) // TODO: maybe get interactive controller differently
+        return PullUpMenuTransition(isPresenting: true, interactionController: (presenting as? PullUpMenuInteractiveTransitionParent)?.interactiveController) // TODO: maybe get interactive controller differently
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -36,6 +36,6 @@ extension PullUpMenuController: UIViewControllerTransitioningDelegate {
 }
 
 
-public protocol InteractiveTransitionParent: UIViewController {
+public protocol PullUpMenuInteractiveTransitionParent: UIViewController {
     var interactiveController: PullUpMenuInteractionController? { get }
 }

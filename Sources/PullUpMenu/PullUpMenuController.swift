@@ -76,7 +76,9 @@ public class PullUpMenuController: UIViewController {
             PullUpMenuItem(title: "Sleeptimer", subtitle: "0:20", image: UIImage(named: "sleeptimer"), tintColor: UIColor(red: 0.302, green: 0.298, blue: 0.82, alpha: 1)),
             PullUpMenuItem(title: "Crossplay", image: UIImage(named: "sleeptimer")),
             PullUpMenuItem(title: "Kürzen", image: UIImage(named: "sleeptimer")),
-            PullUpMenuItem(title: "Teilen", image: UIImage(named: "sleeptimer"))
+            PullUpMenuItem(title: "Teilen", image: UIImage(named: "sleeptimer"), touchUpInsideHandler: {
+                print("pressed share button")
+            })
         ]
     }
     
@@ -269,16 +271,6 @@ extension PullUpMenuController {
             vibrancyView.contentView.layer.cornerRadius = 16
         }
         
-        override var isHighlighted: Bool {
-            didSet {
-                print("set highlighted to \(isHighlighted)")
-                //vibrancyBlurStyle = isHighlighted ? .dark : .regular
-                //titleLabel.textColor = isHighlighted ? .black : .white
-                //imageView.tintColor = isHighlighted ? .black : .white
-                updateBackground()
-            }
-        }
-        
         
         var isActive: Bool = false {
             didSet {
@@ -294,6 +286,45 @@ extension PullUpMenuController {
             vibrancyView.contentView.backgroundColor = UIColor(white: 1.0, alpha: isActive ? (isHighlighted ? 0.8 : 1.0) : (isHighlighted ? 0.5 : 0.2) )
         }
         
+        
+        
+        
+        // MARK: - UITouch Delegate
+        
+        private let animationDuration: TimeInterval = 0.8
+        private let animationCurve: UITimingCurveProvider = UISpringTimingParameters(dampingRatio: 0.5)
+        private var animator = UIViewPropertyAnimator()
+        
+        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            
+            let duration = TimeInterval(animator.isRunning ? animator.fractionComplete : 1) * animationDuration
+            animator = UIViewPropertyAnimator(duration: duration, timingParameters: UISpringTimingParameters(dampingRatio: 0.5))
+            animator.addAnimations {
+                self.vibrancyView.contentView.backgroundColor = UIColor(white: 1.0, alpha: self.isActive ? 0.8 : 0.5)
+                self.contentView.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            }
+            animator.startAnimation()
+        }
+        
+        override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+            menuItem?.touchUpInsideHandler?()
+            touchesFinished(touches, with: event)
+        }
+        
+        override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+            touchesFinished(touches, with: event)
+        }
+        
+        private func touchesFinished(_ touches: Set<UITouch>, with event: UIEvent?) {
+            
+            let duration = TimeInterval(animator.isRunning ? animator.fractionComplete : 1) * animationDuration
+            animator = UIViewPropertyAnimator(duration: duration, timingParameters: UISpringTimingParameters(damping: 0.4, response: 0.2))
+            animator.addAnimations {
+                self.vibrancyView.contentView.backgroundColor = UIColor(white: 1.0, alpha: self.isActive ? 1.0 : 0.2)
+                self.contentView.transform = .identity
+            }
+            animator.startAnimation()
+        }
     }
     
 }

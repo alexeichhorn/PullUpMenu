@@ -13,11 +13,13 @@ public class PullUpMenuItem {
     let subtitle: String?
     let image: UIImage?
     let tintColor: UIColor
+    var touchUpInsideHandler: (() -> Void)? = nil
     
-    init(title: String, subtitle: String? = nil, image: UIImage?, tintColor: UIColor = .black) {
+    init(title: String, subtitle: String? = nil, image: UIImage?, tintColor: UIColor = .black, touchUpInsideHandler: (() -> Void)? = nil) {
         self.title = title
         self.subtitle = subtitle
         self.image = image
         self.tintColor = tintColor
+        self.touchUpInsideHandler = touchUpInsideHandler
     }
 }
