@@ -36,6 +36,6 @@ extension PullUpMenuController: UIViewControllerTransitioningDelegate {
 }
 
 
-protocol InteractiveTransitionParent: UIViewController {
+public protocol InteractiveTransitionParent: UIViewController {
     var interactiveController: PullUpMenuInteractionController? { get }
 }
