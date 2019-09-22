@@ -14,7 +14,7 @@ class PullUpMenuTransition: CustomAnimator {
     var isInteractive = false
     var interactionController: UIPercentDrivenInteractiveTransition?
     
-    public init(isPresenting: Bool, duration: TimeInterval = 2.35, interactionController: UIPercentDrivenInteractiveTransition? = nil) {
+    public init(isPresenting: Bool, duration: TimeInterval = 0.35, interactionController: UIPercentDrivenInteractiveTransition? = nil) {
         self.interactionController = interactionController
         self.isPresenting = isPresenting
         super.init(duration: duration)

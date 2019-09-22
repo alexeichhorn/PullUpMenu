@@ -63,23 +63,28 @@ public class PullUpMenuController: UIViewController {
     
     // MARK: -
     
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+    
+    private func setup() {
+        // set transition style
+        self.transitioningDelegate = self
+        self.modalPresentationStyle = .custom
+    }
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         
         // setup interactive transition
-        self.transitioningDelegate = self
-        self.modalPresentationStyle = .custom
         interactionController = PullUpMenuInteractionController(isPresenting: false, viewController: self)
         
-        // sample items
-        items = [
-            PullUpMenuItem(title: "Sleeptimer", subtitle: "0:20", image: UIImage(named: "sleeptimer"), tintColor: UIColor(red: 0.302, green: 0.298, blue: 0.82, alpha: 1)),
-            PullUpMenuItem(title: "Crossplay", image: UIImage(named: "sleeptimer")),
-            PullUpMenuItem(title: "Kürzen", image: UIImage(named: "sleeptimer")),
-            PullUpMenuItem(title: "Teilen", image: UIImage(named: "sleeptimer"), touchUpInsideHandler: {
-                print("pressed share button")
-            })
-        ]
     }
     
     override public func loadView() {
@@ -251,6 +256,7 @@ extension PullUpMenuController {
             label.font = UIFont.systemFont(ofSize: 18.0, weight: .semibold)
             label.minimumScaleFactor = 0.5
             label.adjustsFontSizeToFitWidth = true
+            label.baselineAdjustment = .alignCenters
             setupBackground()
             
             return label

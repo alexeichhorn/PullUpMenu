@@ -15,7 +15,7 @@ public class PullUpMenuItem {
     let tintColor: UIColor
     var touchUpInsideHandler: (() -> Void)? = nil
     
-    init(title: String, subtitle: String? = nil, image: UIImage?, tintColor: UIColor = .black, touchUpInsideHandler: (() -> Void)? = nil) {
+    public init(title: String, subtitle: String? = nil, image: UIImage?, tintColor: UIColor = .black, touchUpInsideHandler: (() -> Void)? = nil) {
         self.title = title
         self.subtitle = subtitle
         self.image = image
