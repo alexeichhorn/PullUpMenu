@@ -45,14 +45,15 @@ class PullUpMenuTransition: CustomAnimator {
         
         // button preconditions
         
+        let midBottomFrame = CGRect(x: bottomVC.view.frame.midX, y: bottomVC.view.frame.maxY, width: 20, height: 20)
         let sourceButton = isPresenting ? baseVC?.pullUpMenuButton : menuController?.dismissButton
         let destinationButton = isPresenting ? menuController?.dismissButton : baseVC?.pullUpMenuButton
-        let sourceButtonFrame = containerView.convert(sourceButton?.frame ?? .zero, from: sourceButton?.superview)
-        let finalButtonFrame = containerView.convert(destinationButton?.frame ?? .zero, from: destinationButton?.superview)
+        let sourceButtonFrame = containerView.convert(sourceButton?.frame ?? midBottomFrame, from: sourceButton?.superview)
+        let finalButtonFrame = containerView.convert(destinationButton?.frame ?? midBottomFrame, from: destinationButton?.superview)
         let dismissButtonFrame = isPresenting ? finalButtonFrame : sourceButtonFrame
         let openButtonFrame = isPresenting ? sourceButtonFrame : finalButtonFrame
         var transitionButton: AnimatablePullUpButton?
-        if let button = sourceButton {
+        if let button = sourceButton, destinationButton != nil {
             let buttonFrame = containerView.convert(button.frame, from: button.superview)
             transitionButton = AnimatablePullUpButton(frame: buttonFrame, direction: isPresenting ? .up : .down)
             containerView.addSubview(transitionButton!)
