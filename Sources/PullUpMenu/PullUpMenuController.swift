@@ -12,6 +12,8 @@ public class PullUpMenuController: UIViewController {
     
     public var items = [PullUpMenuItem]()
     
+    public var numberOfColumns = 2
+    
     // MARK: - View Decleration
     
     var backgroundView: UIVisualEffectView = {
@@ -168,7 +170,7 @@ extension PullUpMenuController: UICollectionViewDelegate {
 extension PullUpMenuController: UICollectionViewDelegateFlowLayout {
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.contentSize.width/2 - 8
+        let width = collectionView.contentSize.width / CGFloat(numberOfColumns) - 8
         return CGSize(width: width > 0 ? width : 0, height: 55)
     }
     
