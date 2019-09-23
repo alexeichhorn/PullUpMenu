@@ -151,7 +151,6 @@ extension PullUpMenuController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "menuItem", for: indexPath) as! MenuItemCell
         
         cell.menuItem = items[indexPath.row]
-        cell.isActive = indexPath.row == 0
         
         return cell
     }

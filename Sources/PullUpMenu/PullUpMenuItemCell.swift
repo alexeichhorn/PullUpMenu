@@ -9,13 +9,15 @@ import UIKit
 
 extension PullUpMenuController {
     
-    class MenuItemCell: UICollectionViewCell {
+    class MenuItemCell: UICollectionViewCell, PullUpMenuItemDelegate {
         
         weak var menuItem: PullUpMenuItem? {
             didSet {
                 imageView.image = menuItem?.image
                 titleLabel.text = menuItem?.title
                 subtitleLabel.text = menuItem?.subtitle
+                isActive = menuItem?.isActive ?? false
+                menuItem?.delegate = self
             }
         }
         
@@ -118,7 +120,7 @@ extension PullUpMenuController {
         }
         
         private func updateBackground() {
-            vibrancyView.contentView.backgroundColor = UIColor(white: 1.0, alpha: isActive ? (isHighlighted ? 0.8 : 1.0) : (isHighlighted ? 0.5 : 0.2) )
+            vibrancyView.contentView.backgroundColor = UIColor(white: 1.0, alpha: isActive ? 1.0 : 0.2 )
         }
         
         
@@ -159,6 +161,16 @@ extension PullUpMenuController {
                 self.contentView.transform = .identity
             }
             animator.startAnimation()
+        }
+        
+        
+        
+        // MARK: - Menu Item Delegate
+        
+        func menuItemIsActiveDidChange() {
+            DispatchQueue.main.async {
+                self.isActive = self.menuItem?.isActive ?? false
+            }
         }
     }
     

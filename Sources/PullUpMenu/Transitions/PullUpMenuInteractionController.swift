@@ -61,8 +61,8 @@ open class PullUpMenuInteractionController: UIPercentDrivenInteractiveTransition
             
             let velocity = gesture.velocity(in: gesture.view)
             let projected = translate.y + project(initalVelocity: velocity.y)
-            let projectedPercent = (isPresenting ? -1 : 1) * projected / gesture.view!.bounds.size.height 
-            print("projected percent: \(projectedPercent)")
+            let projectedPercent = (isPresenting ? -1 : 1) * projected / gesture.view!.bounds.size.height
+            print("projected percent: \(projectedPercent) from current: \(percent)")
             
             completionCurve = .easeOut
             

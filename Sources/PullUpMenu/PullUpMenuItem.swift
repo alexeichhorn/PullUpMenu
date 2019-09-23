@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol PullUpMenuItemDelegate: class {
+    func menuItemIsActiveDidChange()
+}
+
 public class PullUpMenuItem {
     let title: String
     let subtitle: String?
@@ -15,11 +19,20 @@ public class PullUpMenuItem {
     let tintColor: UIColor
     var touchUpInsideHandler: (() -> Void)? = nil
     
-    public init(title: String, subtitle: String? = nil, image: UIImage?, tintColor: UIColor = .black, touchUpInsideHandler: (() -> Void)? = nil) {
+    weak var delegate: PullUpMenuItemDelegate?
+    
+    public var isActive = false {
+        didSet {
+            delegate?.menuItemIsActiveDidChange()
+        }
+    }
+    
+    public init(title: String, subtitle: String? = nil, image: UIImage?, tintColor: UIColor = .black, isActive: Bool = false, touchUpInsideHandler: (() -> Void)? = nil) {
         self.title = title
         self.subtitle = subtitle
         self.image = image
         self.tintColor = tintColor
+        self.isActive = isActive
         self.touchUpInsideHandler = touchUpInsideHandler
     }
 }
