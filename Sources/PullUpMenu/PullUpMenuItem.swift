@@ -27,6 +27,7 @@ public class PullUpMenuItem {
         }
     }
     
+    /// - parameter touchUpInsideHandler: don't use strong reference inside closure
     public init(title: String, subtitle: String? = nil, image: UIImage?, tintColor: UIColor = .black, isActive: Bool = false, touchUpInsideHandler: (() -> Void)? = nil) {
         self.title = title
         self.subtitle = subtitle

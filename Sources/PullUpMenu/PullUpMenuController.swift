@@ -14,6 +14,8 @@ public class PullUpMenuController: UIViewController {
     
     public var numberOfColumns = 2
     
+    public lazy var animator = PullUpAnimator(menuController: self)
+    
     // MARK: - View Decleration
     
     var backgroundView: UIVisualEffectView = {
@@ -61,7 +63,7 @@ public class PullUpMenuController: UIViewController {
         return collectionView
     }()
     
-    var interactionController: PullUpMenuInteractionController?
+    var interactionController: PullUpInteractiveAnimator?
     
     // MARK: -
     
@@ -77,7 +79,6 @@ public class PullUpMenuController: UIViewController {
     
     private func setup() {
         // set transition style
-        self.transitioningDelegate = self
         self.modalPresentationStyle = .custom
     }
     
@@ -85,7 +86,7 @@ public class PullUpMenuController: UIViewController {
         super.viewDidLoad()
         
         // setup interactive transition
-        interactionController = PullUpMenuInteractionController(isPresenting: false, viewController: self)
+        interactionController = PullUpInteractiveAnimator(menuController: self)
         
     }
     
@@ -135,7 +136,14 @@ public class PullUpMenuController: UIViewController {
     }
     
     @IBAction func dismissPressed(_ sender: Any?) {
-        self.dismiss(animated: true, completion: nil)
+        //self.dismiss(animated: true, completion: nil)
+        
+        guard let parent = parent else { return }
+        /*NewTransition(isPresenting: false).startAnimation(from: self, to: parent, completion: {
+            self.view.removeFromSuperview()
+            self.removeFromParent()
+        })*/
+        animator.close()
     }
     
 }
