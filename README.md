@@ -27,3 +27,4 @@ PullUpMenuItem(title: "Item", touchUpInsideHandler: { [unowned self, unowned men
   self.doStuff()
   menuController.doStuff()
 })
+```

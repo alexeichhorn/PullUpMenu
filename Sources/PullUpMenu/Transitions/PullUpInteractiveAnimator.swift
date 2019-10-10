@@ -84,8 +84,9 @@ public class PullUpInteractiveAnimator {
     
     
     private func openMenuController() {
-        menuController = menuGenerator?()
+        let menuController = menuGenerator?()
         menuController?.present(in: viewController, animated: false)
+        self.menuController = menuController // save in seperate variable to make sure menuController doesn't get deallocated before presented
     }
     
     
