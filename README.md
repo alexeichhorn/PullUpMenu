@@ -18,6 +18,24 @@ PullUpMenuItem(title: "Item", subtitle: "Subtitle", image: UIImage(named: "item"
 })
 ```
 
+## Interactive Animation
+
+To add support for interactive opening of the `PullUpMenuController`, you should add something like this to your base view controller:
+```
+var interactiveController: PullUpInteractiveAnimator?
+
+override func viewDidLoad() {
+  super.viewDidLoad()
+  
+  interactiveController = PullUpInteractiveAnimator(viewController: self, menuGenerator: {
+      let menuController = PullUpMenuController()
+      // add data to menu here
+      return menuController
+  })
+}
+```
+
+
 ## Important
 
 When using `PullUpMenuItem.touchUpInsideHandler`, you should never use a strong refrence to the corresponding `PullUpMenuController` or the view controller it is presented on. This could lead to memory leaks. 
