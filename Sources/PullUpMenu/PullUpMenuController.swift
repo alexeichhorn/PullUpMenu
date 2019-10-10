@@ -136,13 +136,29 @@ public class PullUpMenuController: UIViewController {
     }
     
     @IBAction func dismissPressed(_ sender: Any?) {
-        //self.dismiss(animated: true, completion: nil)
+        animator.close()
+    }
+    
+    /// present menu controller full screen above given view controller
+    public func present(in vc: UIViewController, animated: Bool = true) {
         
-        guard let parent = parent else { return }
-        /*NewTransition(isPresenting: false).startAnimation(from: self, to: parent, completion: {
-            self.view.removeFromSuperview()
-            self.removeFromParent()
-        })*/
+        vc.view.addSubview(view)
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.topAnchor.constraint(equalTo: vc.view.topAnchor).isActive = true
+        view.rightAnchor.constraint(equalTo: vc.view.rightAnchor).isActive = true
+        view.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor).isActive = true
+        view.leftAnchor.constraint(equalTo: vc.view.leftAnchor).isActive = true
+        
+        vc.addChild(self)
+        
+        if animated {
+            animator.open()
+        }
+    }
+    
+    public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
         animator.close()
     }
     

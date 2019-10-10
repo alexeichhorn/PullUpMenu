@@ -236,7 +236,7 @@ public class PullUpAnimator {
     }
     
     @objc private func update(displayLink: CADisplayLink) {
-        print("\(displayLink.timestamp) -> \(animator.fractionComplete) \(animator.isRunning)")
+        //print("\(displayLink.timestamp) -> \(animator.fractionComplete) \(animator.isRunning)")
         
         if animator.isRunning {
             let percentComplete = animator.isReversed ? (1 - animator.fractionComplete) : animator.fractionComplete

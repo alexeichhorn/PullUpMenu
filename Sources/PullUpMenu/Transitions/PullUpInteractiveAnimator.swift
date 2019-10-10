@@ -85,16 +85,7 @@ public class PullUpInteractiveAnimator {
     
     private func openMenuController() {
         menuController = menuGenerator?()
-        
-        viewController.view.addSubview(menuController!.view)
-        
-        menuController?.view.translatesAutoresizingMaskIntoConstraints = false
-        menuController?.view.topAnchor.constraint(equalTo: viewController.view.topAnchor).isActive = true
-        menuController?.view.rightAnchor.constraint(equalTo: viewController.view.rightAnchor).isActive = true
-        menuController?.view.bottomAnchor.constraint(equalTo: viewController.view.bottomAnchor).isActive = true
-        menuController?.view.leftAnchor.constraint(equalTo: viewController.view.leftAnchor).isActive = true
-        
-        viewController.addChild(menuController!)
+        menuController?.present(in: viewController, animated: false)
     }
     
     
