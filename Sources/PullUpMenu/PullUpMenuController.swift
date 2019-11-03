@@ -126,6 +126,10 @@ public class PullUpMenuController: UIViewController {
         dismissButton.centerXAnchor.constraint(equalTo: vibrantContentView.centerXAnchor).isActive = true
         dismissButton.topAnchor.constraint(equalTo: vibrantContentView.safeAreaLayoutGuide.topAnchor, constant: 100).isActive = true
         
+        // popover style
+        if modalPresentationStyle == .popover {
+            dismissButton.isHidden = true
+        }
     }
     
     
@@ -135,12 +139,41 @@ public class PullUpMenuController: UIViewController {
         collectionView.collectionViewLayout.invalidateLayout() // update size for item
     }
     
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // update popover size
+        if modalPresentationStyle == .popover {
+            preferredContentSize = collectionView.bounds.size
+        }
+    }
+    
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if traitCollection.horizontalSizeClass == .regular && modalPresentationStyle != .popover {
+            dismiss(animated: false)
+        } else if presentingViewController?.traitCollection.horizontalSizeClass == .compact && modalPresentationStyle == .popover {
+            dismiss(animated: false)
+        }
+    }
+    
     @IBAction func dismissPressed(_ sender: Any?) {
         animator.close()
     }
     
     /// present menu controller full screen above given view controller
-    public func present(in vc: UIViewController, animated: Bool = true) {
+    public func present(in vc: UIViewController, animated: Bool = true, sourceView: UIView? = nil, sourceRect: CGRect? = nil) {
+        
+        if traitCollection.horizontalSizeClass == .regular,
+            let sourceView = sourceView, let sourceRect = sourceRect {
+            
+            modalPresentationStyle = .popover
+            popoverPresentationController?.sourceView = sourceView
+            popoverPresentationController?.sourceRect = sourceRect
+            popoverPresentationController?.permittedArrowDirections = [.down]
+            popoverPresentationController?.backgroundColor = .black
+            vc.present(self, animated: true, completion: nil)
+            return
+        }
         
         vc.view.addSubview(view)
         
@@ -159,7 +192,9 @@ public class PullUpMenuController: UIViewController {
     
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         super.dismiss(animated: flag, completion: completion)
-        animator.close()
+        if modalPresentationStyle != .popover {
+            animator.close()
+        }        
     }
     
 }

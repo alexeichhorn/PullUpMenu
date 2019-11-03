@@ -52,6 +52,8 @@ public class PullUpAnimator {
     }
     
     func updateInteractive(percentComplete: CGFloat) {
+        guard menuController?.modalPresentationStyle != .popover else { return }
+        let percentComplete = max(min(percentComplete, 1), 0)
         animator.fractionComplete = percentComplete
         containerLayers.forEach({ $0.timeOffset = CFTimeInterval(percentComplete) })
     }
@@ -60,7 +62,7 @@ public class PullUpAnimator {
         animator.isReversed = true
         let timingParameters = UISpringTimingParameters(damping: 1, response: 0.4)
         let preferredDuration = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters).duration
-        animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: CGFloat(preferredDuration / animator.duration))
+        animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: animator.fractionComplete * CGFloat(preferredDuration / animator.duration))
         displayLink?.isPaused = false
     }
     
@@ -76,8 +78,6 @@ public class PullUpAnimator {
         
         guard let menuController = menuController,
             let bottomVC = menuController.parent else { return }
-        
-        let duration = 0.3 // just for demo
         
         let baseVC = bottomVC as? PullUpMenuButtonDelegate
         
@@ -147,6 +147,7 @@ public class PullUpAnimator {
         for cell in (menuController.collectionView.visibleCells as? [PullUpMenuController.MenuItemCell]) ?? [] {
             let cellFrame = menuController.view.convert(cell.frame, from: cell.superview)
             //print(cellFrame.origin.y)
+            let duration = 1.0
             
             let animationHeightFactor = duration / Double(menuController.view.frame.height) // start time per pixel higher
             let animationDuration: TimeInterval = 0.4*duration

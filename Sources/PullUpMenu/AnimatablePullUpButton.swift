@@ -43,7 +43,7 @@ public class AnimatablePullUpButton: UIControl {
     
     private func setup() {
         
-        //backgroundColor = .clear
+        backgroundColor = .clear
         
         addTarget(self, action: #selector(touchDown), for: [.touchDown, .touchDragEnter])
         addTarget(self, action: #selector(touchUp), for: [.touchUpInside, .touchDragExit, .touchCancel])
