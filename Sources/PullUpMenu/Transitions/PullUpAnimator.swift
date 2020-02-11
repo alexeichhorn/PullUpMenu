@@ -60,7 +60,7 @@ public class PullUpAnimator {
     
     func cancel() {
         animator.isReversed = true
-        let timingParameters = UISpringTimingParameters(damping: 1, response: 0.4)
+        let timingParameters: UITimingCurveProvider = state == .opened ? UICubicTimingParameters(animationCurve: .linear) : UISpringTimingParameters(damping: 1, response: 0.4) // spring timing messes up blur background when opened
         let preferredDuration = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters).duration
         animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: animator.fractionComplete * CGFloat(preferredDuration / animator.duration))
         displayLink?.isPaused = false
@@ -237,7 +237,7 @@ public class PullUpAnimator {
     }
     
     @objc private func update(displayLink: CADisplayLink) {
-        //print("\(displayLink.timestamp) -> \(animator.fractionComplete) \(animator.isRunning)")
+        //print("\(animator.fractionComplete) \t \(animator.isRunning) \t (\(displayLink.timestamp))")
         
         if animator.isRunning {
             let percentComplete = animator.isReversed ? (1 - animator.fractionComplete) : animator.fractionComplete
