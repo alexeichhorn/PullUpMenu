@@ -34,6 +34,7 @@ public class AnimatablePullUpButton: UIControl {
     init(frame: CGRect, direction: Direction) {
         currentDirection = direction
         super.init(frame: frame)
+        setup()
     }
     
     required init?(coder aDecoder: NSCoder) {
