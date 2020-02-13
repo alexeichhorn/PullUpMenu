@@ -94,16 +94,16 @@ public class PullUpAnimator {
         
         // button preconditions
         
-        let midBottomFrame = CGRect(x: bottomVC.view.frame.midX, y: bottomVC.view.frame.maxY, width: 20, height: 20)
+        let midBottomFrame = CGRect(x: bottomVC.view.frame.midX, y: bottomVC.view.frame.maxY, width: 20, height: 20) // used as backup
         let sourceButton = state == .closed ? baseVC?.pullUpMenuButton : menuController.dismissButton
         let destinationButton = state == .closed ? menuController.dismissButton : baseVC?.pullUpMenuButton
-        let sourceButtonFrame = sourceButton?.frame ?? midBottomFrame
-        let finalButtonFrame = destinationButton?.frame ?? midBottomFrame
+        let sourceButtonFrame = (menuController.view.convert(sourceButton?.frame, from: sourceButton?.superview)) ?? midBottomFrame
+        let finalButtonFrame = (menuController.view.convert(destinationButton?.frame, from: destinationButton?.superview)) ?? midBottomFrame
         let dismissButtonFrame = state == .closed ? finalButtonFrame : sourceButtonFrame
         let openButtonFrame = state == .closed ? sourceButtonFrame : finalButtonFrame
         var transitionButton: AnimatablePullUpButton?
         if let button = sourceButton, destinationButton != nil {
-            let buttonFrame = button.frame
+            let buttonFrame = menuController.view.convert(button.frame, from: button.superview)
             transitionButton = AnimatablePullUpButton(frame: buttonFrame, direction: state == .closed ? .up : .down)
             menuController.view.addSubview(transitionButton!)
             sourceButton?.alpha = 0

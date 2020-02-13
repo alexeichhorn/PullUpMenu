@@ -32,3 +32,17 @@ extension UISpringTimingParameters {
     }
     
 }
+
+extension UICoordinateSpace {
+    
+    func convert(_ rect: CGRect?, to coordinateSpace: UICoordinateSpace?) -> CGRect? {
+        guard let rect = rect, let coordinateSpace = coordinateSpace else { return nil }
+        return convert(rect, to: coordinateSpace)
+    }
+    
+    func convert(_ rect: CGRect?, from coordinateSpace: UICoordinateSpace?) -> CGRect? {
+        guard let rect = rect, let coordinateSpace = coordinateSpace else { return nil }
+        return convert(rect, from: coordinateSpace)
+    }
+    
+}
