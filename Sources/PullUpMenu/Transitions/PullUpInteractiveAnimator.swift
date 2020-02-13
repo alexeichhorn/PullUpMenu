@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import os.log
 
 public class PullUpInteractiveAnimator {
     
@@ -15,6 +16,8 @@ public class PullUpInteractiveAnimator {
     private var menuGenerator: (() -> PullUpMenuController)?
     private weak var viewController: UIViewController!
     private weak var menuController: PullUpMenuController?
+    
+    private let log = OSLog(subsystem: "PullUpMenu", category: String(describing: PullUpInteractiveAnimator.self))
     
     public init(viewController: UIViewController, menuGenerator: @escaping () -> PullUpMenuController, gestureDelegate: UIGestureRecognizerDelegate? = nil) {
         self.isPresenting = true
@@ -41,7 +44,7 @@ public class PullUpInteractiveAnimator {
     @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
         let translate = gesture.translation(in: gesture.view)
         let percent = (isPresenting ? -1 : 1) * translate.y / gesture.view!.bounds.size.height
-        print("percent: \(percent)")
+        //print("percent: \(percent)")
         
         switch gesture.state {
         case .began:
@@ -68,7 +71,7 @@ public class PullUpInteractiveAnimator {
             let velocity = gesture.velocity(in: gesture.view)
             let projected = translate.y + project(initalVelocity: velocity.y)
             let projectedPercent = (isPresenting ? -1 : 1) * projected / gesture.view!.bounds.size.height
-            print("projected percent: \(projectedPercent) from current: \(percent)")
+            os_log("projected percent: %{public}.4f from current: %{public}.4f", log: log, type: .debug, projectedPercent, percent)
             
             if projectedPercent > 0.4 {
                 let fractionRemaining = 1 - percent
