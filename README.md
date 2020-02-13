@@ -10,6 +10,13 @@ menuController.items = [
 ]
 menuController.present(in: self)
 ```
+To show `PullUpMenuController` in popover style on a larger screen, present it like this:
+```
+menuController.present(in: self, sourceView: button, sourceRect: button.bounds)
+```
+Even if you specify a `sourceView` and `sourceRect`, the PullUpMenu only shows in popover mode, when appropriate, that is whenever the horizontal size class is regular. It will switch between modes as the available space changes.
+<br><br>
+
 
 A `PullUpMenuItem` always needs a `title`, but can have optionally a `subtitle`, `image`, `tintColor`, `touchUpInsideHandler` and `isActive` property. E.g.
 ```
