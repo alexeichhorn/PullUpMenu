@@ -33,6 +33,7 @@ public class PullUpInteractiveAnimator {
     
     private func setupGestureRecognizer(in view: UIView, withDelegate gestureDelegate: UIGestureRecognizerDelegate?) {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan))
+        pan.name = "pullUpMenu" // for later identification
         pan.delegate = gestureDelegate
         view.addGestureRecognizer(pan)
     }
