@@ -44,6 +44,7 @@ public class PullUpInteractiveAnimator {
         
         switch gesture.state {
         case .began:
+            guard panEnabled else { return }
             inProgress = true
             if isPresenting {
                 openMenuController()
@@ -87,6 +88,17 @@ public class PullUpInteractiveAnimator {
         let menuController = menuGenerator?()
         menuController?.present(in: viewController, animated: false)
         self.menuController = menuController // save in seperate variable to make sure menuController doesn't get deallocated before presented
+    }
+    
+    
+    // MARK: - Regular Size Handling
+    
+    /// when enabled, the menu controller can't be interactively opened when in popover mode. (default: disabled)
+    /// - note: recommended whenever you enabled popover mode in menu controller
+    public var disableOnPopover: Bool = false
+    
+    private var panEnabled: Bool {
+        !disableOnPopover || viewController.traitCollection.horizontalSizeClass != .regular
     }
     
     
