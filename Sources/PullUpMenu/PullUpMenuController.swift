@@ -191,10 +191,11 @@ public class PullUpMenuController: UIViewController {
     }
     
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag, completion: completion)
-        if modalPresentationStyle != .popover {
+        if modalPresentationStyle == .popover {
+            super.dismiss(animated: flag, completion: completion)
+        } else {
             animator.close()
-        }        
+        }
     }
     
 }
