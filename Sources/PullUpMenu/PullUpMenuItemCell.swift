@@ -172,6 +172,12 @@ extension PullUpMenuController {
                 self.isActive = self.menuItem?.isActive ?? false
             }
         }
+        
+        func menuItemSubtitleDidChange() {
+            DispatchQueue.main.async {
+                self.subtitleLabel.text = self.menuItem?.subtitle
+            }
+        }
     }
     
 }

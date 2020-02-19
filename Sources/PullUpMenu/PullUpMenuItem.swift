@@ -10,16 +10,22 @@ import UIKit
 
 protocol PullUpMenuItemDelegate: class {
     func menuItemIsActiveDidChange()
+    func menuItemSubtitleDidChange()
 }
 
 public class PullUpMenuItem {
     let title: String
-    let subtitle: String?
     let image: UIImage?
     let tintColor: UIColor
     var touchUpInsideHandler: (() -> Void)? = nil
     
     weak var delegate: PullUpMenuItemDelegate?
+    
+    public var subtitle: String? {
+        didSet {
+            delegate?.menuItemSubtitleDidChange()
+        }
+    }
     
     public var isActive = false {
         didSet {
