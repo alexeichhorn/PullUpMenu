@@ -24,7 +24,7 @@ public class PullUpAnimator {
     private var animator = UIViewPropertyAnimator()
     private var displayLink: CADisplayLink?
     
-    private var state: State = .closed
+    private(set) var state: State = .closed
     
     weak var menuController: PullUpMenuController?
     
@@ -73,10 +73,22 @@ public class PullUpAnimator {
         displayLink?.isPaused = false
     }
     
+    var isRunning: Bool {
+        animator.isRunning
+    }
+    
+    var currentFractionComplete: CGFloat {
+        animator.fractionComplete
+    }
+    
     
     /// - parameter preloadDestination: first loads destination (menu controller) asynchronously before creating animation
     func createAnimation(preloadDestination: Bool = false) {
-        if animator.isRunning { return }
+        if animator.isRunning {
+            animator.pauseAnimation()
+            displayLink?.isPaused = false
+            return
+        }
         
         guard let menuController = menuController,
             let bottomVC = menuController.parent else { return }

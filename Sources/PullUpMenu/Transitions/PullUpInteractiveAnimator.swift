@@ -17,6 +17,9 @@ public class PullUpInteractiveAnimator {
     private weak var viewController: UIViewController!
     private weak var menuController: PullUpMenuController?
     
+    private var inversedPercent = false
+    private var percentOffset: CGFloat = 0.0
+    
     private let log = OSLog(subsystem: "PullUpMenu", category: String(describing: PullUpInteractiveAnimator.self))
     
     public init(viewController: UIViewController, menuGenerator: @escaping () -> PullUpMenuController, gestureDelegate: UIGestureRecognizerDelegate? = nil) {
@@ -43,15 +46,27 @@ public class PullUpInteractiveAnimator {
     
     @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
         let translate = gesture.translation(in: gesture.view)
-        let percent = (isPresenting ? -1 : 1) * translate.y / gesture.view!.bounds.size.height
+        let percent = (inversedPercent ? -1 : 1) * (isPresenting ? -1 : 1) * translate.y / gesture.view!.bounds.size.height + percentOffset
         //print("percent: \(percent)")
         
         switch gesture.state {
         case .began:
             guard panEnabled else { return }
             inProgress = true
+            
+            if menuController?.animator.isRunning ?? false {
+                percentOffset = menuController?.animator.currentFractionComplete ?? 0
+                inversedPercent = (menuController?.animator.state == .closed && !isPresenting) || (menuController?.animator.state == .opened && isPresenting)
+                print("percent offset: \(percentOffset)")
+            } else {
+                percentOffset = 0
+                inversedPercent = false
+            }
+            
             if isPresenting {
-                openMenuController()
+                if !(menuController?.animator.isRunning ?? false) {
+                    openMenuController()
+                }
                 menuController?.animator.createAnimation(preloadDestination: true)
                 
             } else {
@@ -70,7 +85,7 @@ public class PullUpInteractiveAnimator {
             
             let velocity = gesture.velocity(in: gesture.view)
             let projected = translate.y + project(initalVelocity: velocity.y)
-            let projectedPercent = (isPresenting ? -1 : 1) * projected / gesture.view!.bounds.size.height
+            let projectedPercent = (inversedPercent ? -1 : 1) * (isPresenting ? -1 : 1) * projected / gesture.view!.bounds.size.height
             os_log("projected percent: %{public}.4f from current: %{public}.4f", log: log, type: .debug, projectedPercent, percent)
             
             if projectedPercent > 0.4 {
