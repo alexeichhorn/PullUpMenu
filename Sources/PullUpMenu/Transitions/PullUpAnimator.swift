@@ -73,13 +73,23 @@ public class PullUpAnimator {
         displayLink?.isPaused = false
     }
     
-    func createAnimation() {
+    
+    /// - parameter preloadDestination: first loads destination (menu controller) asynchronously before creating animation
+    func createAnimation(preloadDestination: Bool = false) {
         if animator.isRunning { return }
         
         guard let menuController = menuController,
             let bottomVC = menuController.parent else { return }
         
         let baseVC = bottomVC as? PullUpMenuButtonDelegate
+        
+        // load menu controller first asynchronously (to make sure all cells are loaded) before creating animation
+        if preloadDestination {
+            menuController.collectionView.preloadCells {
+                self.createAnimation()
+            }
+            return
+        }
         
         // precondition
         if state == .closed {
@@ -185,6 +195,7 @@ public class PullUpAnimator {
                 }, completion: nil)
             }
         }
+        
         
         animator.addCompletion { position in
         

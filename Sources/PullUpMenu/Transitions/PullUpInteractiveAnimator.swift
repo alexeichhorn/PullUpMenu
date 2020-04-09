@@ -52,7 +52,7 @@ public class PullUpInteractiveAnimator {
             inProgress = true
             if isPresenting {
                 openMenuController()
-                menuController?.animator.createAnimation()
+                menuController?.animator.createAnimation(preloadDestination: true)
                 
             } else {
                 menuController?.animator.createAnimation()

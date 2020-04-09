@@ -186,7 +186,9 @@ public class PullUpMenuController: UIViewController {
         vc.addChild(self)
         
         if animated {
-            animator.open()
+            collectionView.preloadCells {
+                self.animator.open()
+            }
         }
     }
     
@@ -254,6 +256,22 @@ class DynamicCollectionView: UICollectionView {
     
     override var intrinsicContentSize: CGSize {
         return contentSize.extended(by: contentInset)
+    }
+    
+    private var cellsLoaded: Bool {
+        return (dataSource?.collectionView(self, numberOfItemsInSection: 0) ?? 0) <= visibleCells.count
+    }
+    
+    func preloadCells(_ completion: @escaping () -> Void, timeout: Int = 10) {
+        if cellsLoaded || timeout <= 0 {
+            completion()
+            return
+        }
+        
+        layoutIfNeeded()
+        DispatchQueue.main.async { [weak self] in
+            self?.preloadCells(completion, timeout: timeout-1)
+        }
     }
     
 }
