@@ -186,7 +186,9 @@ public class PullUpMenuController: UIViewController {
         vc.addChild(self)
         
         if animated {
+            view.alpha = 0
             collectionView.preloadCells {
+                self.view.alpha = 1
                 self.animator.open()
             }
         }

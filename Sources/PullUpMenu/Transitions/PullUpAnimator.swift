@@ -97,7 +97,9 @@ public class PullUpAnimator {
         
         // load menu controller first asynchronously (to make sure all cells are loaded) before creating animation
         if preloadDestination {
+            menuController.view.alpha = 0
             menuController.collectionView.preloadCells {
+                menuController.view.alpha = 1
                 self.createAnimation()
             }
             return
