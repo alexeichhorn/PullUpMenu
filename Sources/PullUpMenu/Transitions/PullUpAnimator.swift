@@ -24,6 +24,8 @@ public class PullUpAnimator {
     private var animator = UIViewPropertyAnimator()
     private var displayLink: CADisplayLink?
     
+    private var creationFinishedHandler: (() -> Void)?
+    
     private(set) var state: State = .closed
     
     weak var menuController: PullUpMenuController?
@@ -59,18 +61,33 @@ public class PullUpAnimator {
     }
     
     func cancel() {
-        animator.isReversed = true
-        let timingParameters: UITimingCurveProvider = state == .opened ? UICubicTimingParameters(animationCurve: .linear) : UISpringTimingParameters(damping: 1, response: 0.4) // spring timing messes up blur background when opened
-        let preferredDuration = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters).duration
-        animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: animator.fractionComplete * CGFloat(preferredDuration / animator.duration))
-        displayLink?.isPaused = false
+        if animator.state != .inactive {
+            self.animator.isReversed = true
+            let timingParameters: UITimingCurveProvider = self.state == .opened ? UICubicTimingParameters(animationCurve: .linear) : UISpringTimingParameters(damping: 1, response: 0.4) // spring timing messes up blur background when opened
+            let preferredDuration = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters).duration
+            self.animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: self.animator.fractionComplete * CGFloat(preferredDuration / self.animator.duration))
+            self.displayLink?.isPaused = false
+        } else {
+            creationFinishedHandler = {
+                self.animator.stopAnimation(true)
+                self.displayLink?.isPaused = true
+            }
+        }
     }
     
     func finish(relativeVelocity: CGFloat) {
-        let timingParameters = UISpringTimingParameters(damping: 0.8, response: 0.3, initialVelocity: CGVector(dx: relativeVelocity, dy: relativeVelocity))
+        let timingParameters = UISpringTimingParameters(damping: 0.8, response: 0.3, initialVelocity: CGVector(dx: 0, dy: relativeVelocity))
         let preferredDuration = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters).duration
-        animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: CGFloat(preferredDuration / animator.duration))
-        displayLink?.isPaused = false
+        if animator.state != .inactive {
+            animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: CGFloat(preferredDuration / animator.duration))
+            displayLink?.isPaused = false
+        } else {
+            creationFinishedHandler = {
+                self.animator.startAnimation()
+                self.displayLink?.isPaused = false
+            }
+        }
+        
     }
     
     var isRunning: Bool {
@@ -223,6 +240,9 @@ public class PullUpAnimator {
             baseVC?.pullUpMenuButton?.mask = nil // removed later
             transitionButton?.removeFromSuperview()
         }
+        
+        creationFinishedHandler?()
+        creationFinishedHandler = nil
     }
     
     private func animationFinished(position: UIViewAnimatingPosition) {

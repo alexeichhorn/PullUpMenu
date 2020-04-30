@@ -94,6 +94,7 @@ public class PullUpInteractiveAnimator {
                 let relativeVelocity = min(abs(velocity.y) / distanceRemaining, 30)
                 menuController?.animator.finish(relativeVelocity: relativeVelocity)
             } else {
+                print("cancel")
                 menuController?.animator.cancel()
             }
             
