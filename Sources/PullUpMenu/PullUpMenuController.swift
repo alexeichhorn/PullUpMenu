@@ -18,8 +18,16 @@ public class PullUpMenuController: UIViewController {
     
     // MARK: - View Decleration
     
+    private static var blurStyle: UIBlurEffect.Style {
+        if #available(iOS 13.0, *) {
+            return .systemUltraThinMaterialDark
+        } else {
+            return .regular
+        }
+    }
+    
     var backgroundView: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .regular)
+        let blurEffect = UIBlurEffect(style: blurStyle)
         let view = UIVisualEffectView(effect: blurEffect)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -30,7 +38,7 @@ public class PullUpMenuController: UIViewController {
     }
     
     var vibrancyView: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .regular)
+        let blurEffect = UIBlurEffect(style: blurStyle)
         let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
         let view = UIVisualEffectView(effect: vibrancyEffect)
         view.translatesAutoresizingMaskIntoConstraints = false
