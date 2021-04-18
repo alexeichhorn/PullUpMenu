@@ -60,13 +60,18 @@ public class PullUpAnimator {
         containerLayers.forEach({ $0.timeOffset = CFTimeInterval(percentComplete) })
     }
     
-    func cancel() {
+    func cancel(animated: Bool = true) {
         if animator.state != .inactive {
-            self.animator.isReversed = true
-            let timingParameters: UITimingCurveProvider = self.state == .opened ? UICubicTimingParameters(animationCurve: .linear) : UISpringTimingParameters(damping: 1, response: 0.4) // spring timing messes up blur background when opened
-            let preferredDuration = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters).duration
-            self.animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: self.animator.fractionComplete * CGFloat(preferredDuration / self.animator.duration))
-            self.displayLink?.isPaused = false
+            if animated {
+                self.animator.isReversed = true
+                let timingParameters: UITimingCurveProvider = self.state == .opened ? UICubicTimingParameters(animationCurve: .linear) : UISpringTimingParameters(damping: 1, response: 0.4) // spring timing messes up blur background when opened
+                let preferredDuration = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters).duration
+                self.animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: self.animator.fractionComplete * CGFloat(preferredDuration / self.animator.duration))
+                self.displayLink?.isPaused = false
+            } else {
+                self.animator.stopAnimation(false)
+                self.animator.finishAnimation(at: .start)
+            }
         } else {
             creationFinishedHandler = {
                 self.animator.stopAnimation(true)

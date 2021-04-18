@@ -95,7 +95,7 @@ public class PullUpInteractiveAnimator {
                 menuController?.animator.finish(relativeVelocity: relativeVelocity)
             } else {
                 print("cancel")
-                menuController?.animator.cancel()
+                menuController?.animator.cancel(animated: percent > 0)
             }
             
         default:
