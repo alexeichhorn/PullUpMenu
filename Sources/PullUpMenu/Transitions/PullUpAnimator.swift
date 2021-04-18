@@ -68,6 +68,11 @@ public class PullUpAnimator {
                 let preferredDuration = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters).duration
                 self.animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: self.animator.fractionComplete * CGFloat(preferredDuration / self.animator.duration))
                 self.displayLink?.isPaused = false
+                
+                if state == .closed {
+                    menuController?.view.isUserInteractionEnabled = false
+                }
+                
             } else {
                 self.animator.stopAnimation(false)
                 self.animator.finishAnimation(at: .start)
@@ -86,6 +91,11 @@ public class PullUpAnimator {
         if animator.state != .inactive {
             animator.continueAnimation(withTimingParameters: timingParameters, durationFactor: CGFloat(preferredDuration / animator.duration))
             displayLink?.isPaused = false
+            
+            if state == .opened {
+                menuController?.view.isUserInteractionEnabled = false
+            }
+            
         } else {
             creationFinishedHandler = {
                 self.animator.startAnimation()
@@ -225,12 +235,17 @@ public class PullUpAnimator {
                         cell.subtitleLabel.alpha = self.state == .closed ? 1 : 0
                     })
                     
+                    print("transf: \(relativeStart + (self.state == .closed ? 0 : relativeDuration*0.8)) -> \(relativeDuration*0.2)")
                     UIView.addKeyframe(withRelativeStartTime: relativeStart + (self.state == .closed ? 0 : relativeDuration*0.8), relativeDuration: relativeDuration*0.2, animations: {
                         cell.transform = self.state == .closed ? .identity : cellTransform
                     })
                     
                 }, completion: nil)
             }
+            
+            /*animator.addAnimations {
+                cell.transform = self.state == .closed ? .identity : cellTransform
+            }*/
         }
         
         
@@ -243,6 +258,7 @@ public class PullUpAnimator {
             menuController.dismissButton.transform = .identity
             menuController.dismissButton.animatedLayer.removeAllAnimations()
             menuController.dismissButton.setDirection((self.state == .closed) ? .up : .down, animated: false)
+            menuController.view.isUserInteractionEnabled = true
             baseVC?.pullUpMenuButton?.mask = nil // removed later
             transitionButton?.removeFromSuperview()
         }
