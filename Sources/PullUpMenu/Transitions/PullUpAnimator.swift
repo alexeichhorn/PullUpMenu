@@ -95,7 +95,7 @@ public class PullUpAnimator {
     }
     
     var currentFractionComplete: CGFloat {
-        animator.fractionComplete
+        animator.isReversed ? (1 - animator.fractionComplete) : animator.fractionComplete
     }
     
     
@@ -103,6 +103,7 @@ public class PullUpAnimator {
     func createAnimation(preloadDestination: Bool = false) {
         if animator.isRunning {
             animator.pauseAnimation()
+            animator.isReversed = false
             displayLink?.isPaused = false
             return
         }

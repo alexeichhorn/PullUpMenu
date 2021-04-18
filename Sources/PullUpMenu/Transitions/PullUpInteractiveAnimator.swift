@@ -85,7 +85,7 @@ public class PullUpInteractiveAnimator {
             
             let velocity = gesture.velocity(in: gesture.view)
             let projected = translate.y + project(initalVelocity: velocity.y)
-            let projectedPercent = (inversedPercent ? -1 : 1) * (isPresenting ? -1 : 1) * projected / gesture.view!.bounds.size.height
+            let projectedPercent = (inversedPercent ? -1 : 1) * (isPresenting ? -1 : 1) * projected / gesture.view!.bounds.size.height + percentOffset
             os_log("projected percent: %{public}.4f from current: %{public}.4f", log: log, type: .debug, projectedPercent, percent)
             
             if projectedPercent > 0.4 {
