@@ -179,7 +179,7 @@ public class PullUpMenuController: UIViewController {
             popoverPresentationController?.sourceRect = sourceRect
             popoverPresentationController?.permittedArrowDirections = [.down]
             popoverPresentationController?.backgroundColor = .black
-            vc.present(self, animated: true, completion: nil)
+            vc.present(self, animated: animated, completion: nil)
             return
         }
         
