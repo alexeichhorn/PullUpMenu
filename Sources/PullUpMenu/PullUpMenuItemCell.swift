@@ -13,6 +13,7 @@ extension PullUpMenuController {
         
         weak var menuItem: PullUpMenuItem? {
             didSet {
+                contentView.isHidden = (menuItem === PullUpMenuItem.empty)
                 imageView.image = menuItem?.image
                 titleLabel.text = menuItem?.title
                 subtitleLabel.text = menuItem?.subtitle

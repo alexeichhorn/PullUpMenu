@@ -42,4 +42,7 @@ public class PullUpMenuItem {
         self.isActive = isActive
         self.touchUpInsideHandler = touchUpInsideHandler
     }
+    
+    /// is invisible, only takes up space. Can be used as a placeholder
+    public static let empty = PullUpMenuItem(title: "", image: nil)
 }
