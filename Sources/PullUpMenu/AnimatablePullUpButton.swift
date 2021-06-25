@@ -26,6 +26,13 @@ public class AnimatablePullUpButton: UIControl {
     
     private(set) var currentDirection: Direction = .up
     
+    @available(iOS 14.0, *)
+    public lazy var configurationForMenu: ((UIContextMenuInteraction) -> UIContextMenuConfiguration?)? = nil {
+        didSet {
+            isContextMenuInteractionEnabled = (configurationForMenu != nil)
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -188,5 +195,12 @@ public class AnimatablePullUpButton: UIControl {
         selectionAnimator.startAnimation()
     }
     
+    
+    // MARK: - Menu
+    
+    @available(iOS 14.0, *)
+    public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return configurationForMenu?(interaction)
+    }
     
 }

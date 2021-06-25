@@ -14,10 +14,10 @@ protocol PullUpMenuItemDelegate: class {
 }
 
 public class PullUpMenuItem {
-    let title: String
-    let image: UIImage?
-    let tintColor: UIColor
-    var touchUpInsideHandler: (() -> Void)? = nil
+    public let title: String
+    public let image: UIImage?
+    public let tintColor: UIColor
+    public var touchUpInsideHandler: (() -> Void)? = nil
     
     weak var delegate: PullUpMenuItemDelegate?
     
