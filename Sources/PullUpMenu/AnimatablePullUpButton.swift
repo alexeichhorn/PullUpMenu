@@ -26,9 +26,13 @@ public class AnimatablePullUpButton: UIControl {
     
     private(set) var currentDirection: Direction = .up
     
+    private var typeErasedConfigurationForMenu: Any? = nil
+    
     @available(iOS 14.0, *)
-    public lazy var configurationForMenu: ((UIContextMenuInteraction) -> UIContextMenuConfiguration?)? = nil {
-        didSet {
+    public var configurationForMenu: ((UIContextMenuInteraction) -> UIContextMenuConfiguration?)? {
+        get { typeErasedConfigurationForMenu as? (UIContextMenuInteraction) -> UIContextMenuConfiguration? }
+        set {
+            typeErasedConfigurationForMenu = newValue
             isContextMenuInteractionEnabled = (configurationForMenu != nil)
         }
     }
