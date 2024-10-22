@@ -20,7 +20,7 @@ public class PullUpMenuItem {
     public let identifier: String
     public let image: UIImage?
     public let tintColor: UIColor
-    public var touchUpInsideHandler: (() -> Void)? = nil
+    public var touchUpInsideHandler: (@MainActor () -> Void)? = nil
     
     weak var delegate: PullUpMenuItemDelegate?
     
