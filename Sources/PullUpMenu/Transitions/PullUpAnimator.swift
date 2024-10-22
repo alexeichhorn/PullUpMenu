@@ -327,6 +327,7 @@ public class PullUpAnimator {
 }
 
 
+@MainActor
 public protocol PullUpMenuButtonDelegate {
     var pullUpMenuButton: AnimatablePullUpButton? { get }
 }
