@@ -8,11 +8,13 @@
 
 import UIKit
 
-protocol PullUpMenuItemDelegate: class {
+@MainActor
+protocol PullUpMenuItemDelegate: AnyObject {
     func menuItemIsActiveDidChange()
     func menuItemSubtitleDidChange()
 }
 
+@MainActor
 public class PullUpMenuItem {
     public let title: String
     public let identifier: String
@@ -35,7 +37,7 @@ public class PullUpMenuItem {
     }
     
     /// - parameter touchUpInsideHandler: don't use strong reference inside closure
-    public init(title: String, subtitle: String? = nil, identifier: String = UUID().uuidString, image: UIImage?, tintColor: UIColor = .black, isActive: Bool = false, touchUpInsideHandler: (() -> Void)? = nil) {
+    public init(title: String, subtitle: String? = nil, identifier: String = UUID().uuidString, image: UIImage?, tintColor: UIColor = .black, isActive: Bool = false, touchUpInsideHandler: (@MainActor () -> Void)? = nil) {
         self.title = title
         self.subtitle = subtitle
         self.identifier = identifier

@@ -8,6 +8,7 @@
 import UIKit
 import os.log
 
+@MainActor
 public class PullUpInteractiveAnimator {
     
     public private(set) var inProgress = false

@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public class PullUpAnimator {
     
     enum State {
@@ -35,8 +36,20 @@ public class PullUpAnimator {
         setupDisplayLink()
     }
     
+    
     deinit {
-        displayLink?.invalidate()
+        func cleanup() {
+            MainActor.assumeIsolated {
+                displayLink?.invalidate()
+            }
+        }
+        if Thread.isMainThread {
+            cleanup()
+        } else {
+            DispatchQueue.main.async {
+                cleanup()
+            }
+        }
     }
     
     public func open() {
