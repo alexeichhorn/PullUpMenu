@@ -263,17 +263,19 @@ public class PullUpAnimator {
         
         
         animator.addCompletion { position in
-        
-            self.animationFinished(position: position)
-            
-            destinationButton?.alpha = 1
-            sourceButton?.alpha = 1
-            menuController.dismissButton.transform = .identity
-            menuController.dismissButton.animatedLayer.removeAllAnimations()
-            menuController.dismissButton.setDirection((self.state == .closed) ? .up : .down, animated: false)
-            menuController.view.isUserInteractionEnabled = true
-            baseVC?.pullUpMenuButton?.mask = nil // removed later
-            transitionButton?.removeFromSuperview()
+            MainActor.runSync {
+                
+                self.animationFinished(position: position)
+                
+                destinationButton?.alpha = 1
+                sourceButton?.alpha = 1
+                menuController.dismissButton.transform = .identity
+                menuController.dismissButton.animatedLayer.removeAllAnimations()
+                menuController.dismissButton.setDirection((self.state == .closed) ? .up : .down, animated: false)
+                menuController.view.isUserInteractionEnabled = true
+                baseVC?.pullUpMenuButton?.mask = nil // removed later
+                transitionButton?.removeFromSuperview()
+            }
         }
         
         creationFinishedHandler?()
